@@ -108,6 +108,8 @@
 		init_sprite_accessory_subtypes(/datum/sprite_accessory/arachnid_appendages, GLOB.arachnid_appendages_list)
 	if(!GLOB.arachnid_chelicerae_list.len)
 		init_sprite_accessory_subtypes(/datum/sprite_accessory/arachnid_chelicerae, GLOB.arachnid_chelicerae_list)
+	if(!GLOB.ethereal_face_list.len)
+		init_sprite_accessory_subtypes(/datum/sprite_accessory/ethereal_face, GLOB.ethereal_face_list)
 //Monkestation Addition End
 
 	//For now we will always return none for tail_human and ears. | "For now" he says.
@@ -139,6 +141,7 @@
 		"arachnid_appendages" = pick(GLOB.arachnid_appendages_list), //Monkestation Addition
 		"arachnid_chelicerae" = pick(GLOB.arachnid_chelicerae_list), //Monkestation Addition
 		"animecolor" = "#[pick("7F","FF")][pick("7F","FF")][pick("7F","FF")]", //Monkestation Addition
+		"ethereal_face" = pick(GLOB.ethereal_face_list), //Monkestation Addition
 	))
 
 /proc/random_hairstyle(gender)

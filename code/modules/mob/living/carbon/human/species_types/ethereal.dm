@@ -17,7 +17,13 @@
 		NO_UNDERWEAR,
 		HAIR,
 		FACEHAIR,
+		MUTCOLORS, //Monkestation Addition
 	)
+	//Monkestation Addition Begin
+	external_organs = list(
+		/obj/item/organ/external/ethereal_face = "eyes",
+	)
+	//Monkestation Addition End
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_PRIDE | MIRROR_MAGIC | RACE_SWAP | ERT_SPAWN | SLIME_EXTRACT
 	species_cookie = /obj/item/food/energybar
 	species_language_holder = /datum/language_holder/ethereal
