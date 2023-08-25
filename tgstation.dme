@@ -6025,12 +6025,12 @@
 #include "monkestation\code\random_rooms\engines\kilostation.dm"
 #include "monkestation\code\random_rooms\engines\metastation.dm"
 #include "monkestation\code\random_rooms\engines\tramstation.dm"
-#include "code\__HELPERS\global_lists.dm"
-#include "code\__HELPERS\mobs.dm"
-#include "code\_globalvars\lists\flavor_misc.dm"
-#include "code\modules\client\preferences\species_features\ethereal.dm"
-#include "code\modules\mob\living\carbon\human\dummy.dm"
-#include "code\modules\mob\living\carbon\human\species_types\ethereal.dm"
-#include "monkestation\code\modules\mob\dead\new_player\sprite_accessories\ethereal_face.dm"
-#include "monkestation\code\modules\surgery\organs\external\ethereal_face.dm"
+#include "code\__HELPERS\global_lists.dm" //Test
+#include "code\__HELPERS\mobs.dm" //Test
+#include "code\_globalvars\lists\flavor_misc.dm" //Test
+#include "code\modules\client\preferences\species_features\ethereal.dm" //Test
+#include "code\modules\mob\living\carbon\human\dummy.dm" //Test
+#include "code\modules\mob\living\carbon\human\species_types\ethereal.dm" //Test
+#include "monkestation\code\modules\mob\dead\new_player\sprite_accessories\ethereal_face.dm" //Test
+#include "monkestation\code\modules\surgery\organs\external\ethereal_face.dm" //Test
 // END_INCLUDE
