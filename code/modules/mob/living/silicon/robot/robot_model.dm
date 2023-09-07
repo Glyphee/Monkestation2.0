@@ -393,6 +393,10 @@
 	model_select_icon = "engineer"
 	model_traits = list(TRAIT_NEGATES_GRAVITY)
 	hat_offset = -4
+	borg_skins = list(
+		"Default" = list(SKIN_ICON_STATE = "engineer"),
+		"Cosmomech" = list(SKIN_ICON_STATE = "cosmomech")
+	)
 
 /obj/item/robot_model/janitor
 	name = "Janitor"
