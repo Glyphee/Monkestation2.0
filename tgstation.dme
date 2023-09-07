@@ -5872,6 +5872,8 @@
 #include "monkestation\code\modules\mob\living\status_procs.dm"
 #include "monkestation\code\modules\mob\living\basic\animatronic.dm"
 #include "monkestation\code\modules\mob\living\basic\space_fauna\fugu_gland.dm"
+#include "monkestation\code\modules\mob\living\basic\space_fauna\moth_mother\moth_mother.dm"
+#include "monkestation\code\modules\mob\living\basic\space_fauna\moth_mother\moth_mother_ai.dm"
 #include "monkestation\code\modules\mob\living\basic\vermin\mouse.dm"
 #include "monkestation\code\modules\mob\living\carbon\carbon_defense.dm"
 #include "monkestation\code\modules\mob\living\carbon\carbon_defines.dm"
@@ -6146,6 +6148,4 @@
 #include "monkestation\code\random_rooms\engines\kilostation.dm"
 #include "monkestation\code\random_rooms\engines\metastation.dm"
 #include "monkestation\code\random_rooms\engines\tramstation.dm"
-#include "monkestation\code\modules\mob\living\basic\space_fauna\moth_mother\moth_mother_ai.dm"
-#include "monkestation\code\modules\mob\living\basic\space_fauna\moth_mother\moth_mother.dm"
 // END_INCLUDE
