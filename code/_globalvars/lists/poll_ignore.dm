@@ -28,6 +28,7 @@
 #define POLL_IGNORE_LAVALAND_ELITE "lavaland_elite"
 #define POLL_IGNORE_SHUTTLE_DENIZENS "shuttle_denizens"
 #define POLL_IGNORE_BOTS "bots"
+#define POLL_IGNORE_MOTH_MOTHER "moth_mother"
 
 
 GLOBAL_LIST_INIT(poll_ignore_desc, list(
@@ -44,7 +45,7 @@ GLOBAL_LIST_INIT(poll_ignore_desc, list(
 	POLL_IGNORE_GOLEM = "Golems",
 	POLL_IGNORE_DRONE = "Drone shells",
 	POLL_IGNORE_FUGITIVE = "Fugitive Hunter",
-	POLL_IGNORE_DEFECTIVECLONE = "Defective clone",	
+	POLL_IGNORE_DEFECTIVECLONE = "Defective clone",
 	POLL_IGNORE_PYROSLIME = "Slime",
 	POLL_IGNORE_SHADE = "Shade",
 	POLL_IGNORE_IMAGINARYFRIEND = "Imaginary Friend",
@@ -59,6 +60,7 @@ GLOBAL_LIST_INIT(poll_ignore_desc, list(
 	POLL_IGNORE_LAVALAND_ELITE = "Lavaland elite",
 	POLL_IGNORE_SHUTTLE_DENIZENS = "Shuttle denizens",
 	POLL_IGNORE_BOTS = "Bots",
+	POLL_IGNORE_MOTH_MOTHER = "Moth Mother",
 ))
 GLOBAL_LIST_INIT(poll_ignore, init_poll_ignore())
 

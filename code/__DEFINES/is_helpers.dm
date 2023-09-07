@@ -172,6 +172,8 @@ GLOBAL_LIST_INIT(turfs_openspace, typecacheof(list(
 
 #define isspider(A) (istype(A, /mob/living/basic/spider/giant))
 
+#define ismothmother(A) (istype(A, /mob/living/basic/mothmother))
+
 
 //Misc mobs
 #define isobserver(A) (istype(A, /mob/dead/observer))

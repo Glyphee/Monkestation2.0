@@ -174,6 +174,7 @@ GLOBAL_DATUM_INIT(orbit_menu, /datum/orbit_menu, new)
 			mob_allowed_typecache = typecacheof(list(
 				/mob/camera,
 				/mob/living/basic/regal_rat,
+				/mob/living/basic/moth_mother,
 				/mob/living/simple_animal/bot,
 				/mob/living/simple_animal/hostile/megafauna,
 			))

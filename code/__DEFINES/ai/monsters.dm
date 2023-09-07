@@ -98,6 +98,12 @@
 /// The rat's ability to raise a horde of soldiers.
 #define BB_RAISE_HORDE_ABILITY "BB_raise_horde_ability"
 
+// Moth Matriarch
+/// The moth's ability to corrupt an area.
+#define BB_DOMAIN_ABILITY_MM "BB_domain_ability_MM"
+/// The moth's ability to raise a horde of soldiers.
+#define BB_RAISE_HORDE_ABILITY_MM "BB_raise_horde_ability_MM"
+
 // mega arachnid keys
 /// ability to throw restrain projectiles
 #define BB_ARACHNID_RESTRAIN "BB_arachnid_restrain"

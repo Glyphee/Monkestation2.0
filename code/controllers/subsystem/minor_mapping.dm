@@ -1,4 +1,5 @@
 #define PROB_MOUSE_SPAWN 98
+#define PROB_REGAL_RAT_SPAWN 66
 #define PROB_SPIDER_REPLACEMENT 50
 
 SUBSYSTEM_DEF(minor_mapping)
@@ -30,8 +31,10 @@ SUBSYSTEM_DEF(minor_mapping)
 
 		if (prob(PROB_MOUSE_SPAWN))
 			new /mob/living/basic/mouse(proposed_turf)
-		else
-			new /mob/living/basic/regal_rat/controlled(proposed_turf)
+			if (prob(PROB_REGAL_RAT_SPAWN))
+				new /mob/living/basic/regal_rat/controlled(proposed_turf)
+			else
+				new /mob/living/basic/moth_mother/controlled(proposed_turf)
 
 /// Returns true if a mouse won't die if spawned on this turf
 /datum/controller/subsystem/minor_mapping/proc/valid_mouse_turf(turf/open/proposed_turf)
@@ -80,4 +83,5 @@ SUBSYSTEM_DEF(minor_mapping)
 	return shuffle(suitable)
 
 #undef PROB_MOUSE_SPAWN
+#undef PROB_REGAL_RAT_SPAWN
 #undef PROB_SPIDER_REPLACEMENT
