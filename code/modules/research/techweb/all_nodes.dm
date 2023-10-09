@@ -425,6 +425,12 @@
 		"piercesyringe",
 		"plasmarefiller",
 		"smoke_machine",
+		//Monkestation Addition Begin - Taken from Skyrat
+		"brute2medicell",
+		"burn2medicell",
+		"toxin2medicell",
+		"oxy2medicell",
+		//Monkestation Addition End - Taken from Skyrat
 	)
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 5000)
 	discount_experiments = list(/datum/experiment/scanning/random/material/meat = 2000,
@@ -1549,6 +1555,7 @@
 	design_ids = list(
 		"ioncarbine",
 		"stunrevolver",
+		"medigunspeed", //Monkestation Addition - Taken from Skyrat
 	)
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 2500)
 
@@ -2106,6 +2113,12 @@
 		"alien_retractor",
 		"alien_saw",
 		"alien_scalpel",
+		//Monkestation Addition Begin - Taken from Skyrat
+		"brute3medicell",
+		"burn3medicell",
+		"oxy3medicell",
+		"toxin3medicell",
+		//Monkestation Addition End - Taken from Skyrat
 	)
 
 	boost_item_paths = list(
