@@ -1,13 +1,13 @@
-//Medigun Cells/
-/obj/item/stock_parts/cell/medigun/ //This is the cell that mediguns from cargo will come with//
-	name = "Basic Medigun Cell"
-	maxcharge = 1200
-	chargerate = 80
+// //Medigun Cells/
+// /obj/item/stock_parts/cell/medigun/ //This is the cell that mediguns from cargo will come with//
+// 	name = "Basic Medigun Cell"
+// 	maxcharge = 1200
+// 	chargerate = 80
 
-/obj/item/stock_parts/cell/medigun/upgraded
-	name = "Upgraded Medigun Cell"
-	maxcharge = 1500
-	chargerate = 160
+// /obj/item/stock_parts/cell/medigun/upgraded
+// 	name = "Upgraded Medigun Cell"
+// 	maxcharge = 1500
+// 	chargerate = 160
 
 /obj/item/stock_parts/cell/medigun/experimental //This cell type is meant to be used in self charging mediguns like CMO and ERT one.//
 	name = "Experiemental Medigun Cell"
@@ -74,6 +74,7 @@
 /obj/projectile/energy/medical/toxin1/on_hit(mob/living/target)
 	.=..()
 	target.adjustToxLoss(-2.5)
+
 	//target.radiation = max(target.radiation - 20, 0)//Toxin is treatable, but inefficent//
 //T2 Healing Projectiles//
 //Tier II Brute Projectile//

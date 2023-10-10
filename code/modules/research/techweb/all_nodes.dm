@@ -1554,8 +1554,7 @@
 	prereq_ids = list("weaponry", "adv_power"  , "emp_basic")
 	design_ids = list(
 		"ioncarbine",
-		"stunrevolver",
-		"medigunspeed", //Monkestation Addition - Taken from Skyrat
+		"stunrevolver"
 	)
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = 2500)
 
