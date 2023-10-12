@@ -50,6 +50,8 @@ GLOBAL_LIST_EMPTY(anime_bottom_list) //Monkestation Addition
 GLOBAL_LIST_EMPTY(arachnid_appendages_list) //Monkestation Addition
 GLOBAL_LIST_EMPTY(arachnid_chelicerae_list) //Monkestation Addition
 GLOBAL_LIST_EMPTY(goblin_ears_list) //Monkestation Addition
+GLOBAL_LIST_EMPTY(satyr_ears_list) //Monkestation Addition
+GLOBAL_LIST_EMPTY(satyr_horns_list) //Monkestation Addition
 
 GLOBAL_LIST_INIT(color_list_ethereal, list(
 	"Blue" = "#3399ff",
