@@ -6102,7 +6102,9 @@
 /turf/closed/indestructible/syndicate,
 /area/centcom/syndicate_mothership/expansion_bioterrorism)
 "rV" = (
-/obj/structure/falsewall/reinforced,
+/obj/structure/falsewall/reinforced{
+	max_integrity = 999999999
+	},
 /obj/structure/fans/tiny/invisible,
 /turf/open/floor/plating,
 /area/centcom/central_command_areas/admin)
@@ -6392,7 +6394,9 @@
 "sK" = (
 /obj/machinery/door/airlock/centcom{
 	dir = 4;
-	name = "Glyphee's Secret Office"
+	name = "Glyphee's Secret Office";
+	max_integrity = 999999999;
+	normal_integrity = 999999999
 	},
 /obj/effect/mapping_helpers/airlock/access/any/admin/captain,
 /obj/structure/fans/tiny/invisible,
