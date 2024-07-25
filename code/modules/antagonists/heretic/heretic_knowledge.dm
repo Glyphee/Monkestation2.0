@@ -538,7 +538,14 @@
 	animate(summoned, 10 SECONDS, alpha = 155)
 
 	message_admins("A [summoned.name] is being summoned by [ADMIN_LOOKUPFLW(user)] in [ADMIN_COORDJMP(summoned)].")
-	var/list/mob/dead/observer/candidates = poll_candidates_for_mob("Do you want to play as a [summoned.name]?", ROLE_HERETIC, FALSE, 10 SECONDS, summoned)
+	var/list/mob/dead/observer/candidates = SSpolling.poll_ghost_candidates_for_mob(
+		"Do you want to play as a [summoned.name]?",
+		check_jobban = ROLE_HERETIC,
+		poll_time = 10 SECONDS,
+		target_mob = summoned,
+		ignore_category = POLL_IGNORE_HERETIC_MONSTER,
+		role_name_text = summoned.name
+	)
 	if(!LAZYLEN(candidates))
 		loc.balloon_alert(user, "ritual failed, no ghosts!")
 		animate(summoned, 0.5 SECONDS, alpha = 0)
@@ -683,10 +690,6 @@
 		They have [length(our_heretic.researched_knowledge)] knowledge nodes researched, totalling [total_points] points \
 		and have sacrificed [our_heretic.total_sacrifices] people ([our_heretic.high_value_sacrifices] of which were high value)")
 
-	add_event_to_buffer(user, data = "gained knowledge of their final ritual at [worldtime2text()]. \
-		They have [length(our_heretic.researched_knowledge)] knowledge nodes researched, totalling [total_points] points \
-		and have sacrificed [our_heretic.total_sacrifices] people ([our_heretic.high_value_sacrifices] of which were high value)", log_key = "HERETIC")
-
 /datum/heretic_knowledge/ultimate/can_be_invoked(datum/antagonist/heretic/invoker)
 	if(invoker.ascended)
 		return FALSE
@@ -731,7 +734,6 @@
 
 	SSblackbox.record_feedback("tally", "heretic_ascended", 1, route)
 	log_heretic_knowledge("[key_name(user)] completed their final ritual at [worldtime2text()].")
-	add_event_to_buffer(user, data = "completed their final ritual at [worldtime2text()].", log_key = "HERETIC")
 	return TRUE
 
 /datum/heretic_knowledge/ultimate/cleanup_atoms(list/selected_atoms)

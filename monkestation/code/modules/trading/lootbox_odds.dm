@@ -32,8 +32,9 @@
 			user.client.client_token_holder.adjust_antag_tokens(LOW_THREAT, 1)
 
 		if("Loadout Item")
-			var/static/list/viable_types = list()
-			if(!length(viable_types))
+			var/static/list/viable_types
+			if(!viable_types)
+				viable_types = list()
 				for(var/datum/loadout_item/type as anything in subtypesof(/datum/loadout_item))
 					var/datum/loadout_item/listed = new type()
 					if(!istype(listed))
@@ -179,6 +180,7 @@ GLOBAL_LIST_INIT(possible_lootbox_clothing, list(
 		/obj/item/clothing/head/costume/witchwig,
 		/obj/item/clothing/head/costume/xenos,
 		/obj/item/clothing/head/costume/yuri,
+		/obj/item/clothing/head/costume/zed_officercap,
 		/obj/item/clothing/head/cowboy/black/lootbox,
 		/obj/item/clothing/head/cowboy/bounty/lootbox,
 		/obj/item/clothing/head/cowboy/brown/lootbox,
@@ -188,6 +190,7 @@ GLOBAL_LIST_INIT(possible_lootbox_clothing, list(
 		/obj/item/clothing/head/fedora,
 		/obj/item/clothing/head/fedora/carpskin,
 		/obj/item/clothing/head/fedora/white,
+		/obj/item/clothing/head/guardmanhelmet/lootbox,
 		/obj/item/clothing/head/hats/bowler,
 		/obj/item/clothing/head/hats/caphat/lootbox,
 		/obj/item/clothing/head/hats/caphat/parade/lootbox,
@@ -204,6 +207,7 @@ GLOBAL_LIST_INIT(possible_lootbox_clothing, list(
 		/obj/item/clothing/head/hats/warden/drill/lootbox,
 		/obj/item/clothing/head/hats/warden/red/lootbox,
 		/obj/item/clothing/head/mikuhair,
+		/obj/item/clothing/head/milkmanhat,
 		/obj/item/clothing/head/morningstar,
 		/obj/item/clothing/head/mothcap,
 		/obj/item/clothing/head/nanner_crown,
@@ -211,7 +215,7 @@ GLOBAL_LIST_INIT(possible_lootbox_clothing, list(
 		/obj/item/clothing/head/rasta,
 		/obj/item/clothing/head/recruiter_cap/lootbox,
 		/obj/item/clothing/head/saints,
-		/obj/item/clothing/head/soft/fishing_hat/lootbox, //im tempted to make this extra rare
+		/obj/item/clothing/head/soft/fishing_hat/lootbox,
 		/obj/item/clothing/head/soft/rainbow,
 		/obj/item/clothing/head/soft/sec/lootbox,
 		/obj/item/clothing/head/utility/hardhat/pumpkinhead/lootbox,
