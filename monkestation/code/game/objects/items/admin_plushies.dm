@@ -174,8 +174,13 @@
 
 /obj/item/toy/plush/admin/gabbie
 	name = "gabbie"
-	desc = "It's Gabbie!"
+	desc = "She smells like singed hair and motor oil."
 	icon_state = "gabbie"
+	squeak_override = list('monkestation/code/modules/donator/sounds/gabnoiseblip1.wav'=1,
+						'monkestation/code/modules/donator/sounds/gabnoisebutton3.wav'=1,
+						'monkestation/code/modules/donator/sounds/gabnoisebutton8.wav'=1,
+						'monkestation/code/modules/donator/sounds/gabnoisebutton10.wav'=1,
+						'monkestation/code/modules/donator/sounds/gabnoisespark5.wav'=1,)
 /datum/loadout_item/toys/gabbie
 	name = "Gabbie Plush"
 	item_path = /obj/item/toy/plush/admin/gabbie
