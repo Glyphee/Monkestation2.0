@@ -427,7 +427,7 @@
 	icon_state = "siro-mask"
 	attack_verb_continuous = list("bloops", "blurbles", "glomps")
 	attack_verb_simple = list("bloop", "blurble", "glomp")
-	squeak_override = list('sound/misc/woohoo.ogg' = 1)
+	squeak_override = list('sound/effects/footstep/slime1.ogg' = 1)
 	gender = FEMALE
 	append_note = FALSE
 /datum/loadout_item/plushies/siro
