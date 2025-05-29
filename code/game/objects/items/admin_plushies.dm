@@ -425,6 +425,10 @@
 	name = "siro yamamuchi"
 	desc = "Our adorable staff coder slimegirl! We love you Siro!"
 	icon_state = "siro-mask"
+	attack_verb_continuous = list("bloops", "blurbles", "glomps")
+	attack_verb_simple = list("bloop", "blurble", "glomp")
+	squeak_override = list('sound/misc/woohoo.ogg' = 1)
+	gender = FEMALE
 	append_note = FALSE
 /datum/loadout_item/plushies/siro
 	name = "Siro Yamamuchi Plush"
