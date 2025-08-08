@@ -1,7 +1,7 @@
-/mob/living/basic/ggg/susflash
+/mob/living/basic/susflash
 	name = "suspicious flash"
 	desc = "A powerful and versatile flashbulb device, with applications ranging from disorienting attackers to acting as visual receptors in robot production. This one has legs for some reason..."
-	icon = 'monkestation/icons/mob/ggg/susflash.dmi'
+	icon = 'monkestation/icons/mob/basic/susflash.dmi'
 	icon_state = "flash_living"
 	icon_living = "flash_living"
 	icon_dead = "flash_dead"
@@ -43,7 +43,7 @@
 
 	ai_controller = /datum/ai_controller/basic_controller/mouse
 
-/mob/living/basic/ggg/susflash/Initialize(mapload)
+/mob/living/basic/susflash/Initialize(mapload)
 	. = ..()
 	ADD_TRAIT(src, TRAIT_VENTCRAWLER_ALWAYS, INNATE_TRAIT)
 
@@ -52,7 +52,7 @@
 	default_name = "suspicious flash"
 	company_source = "Saturnian United Systems"
 	company_message = "Here is your completely ordinary flash bulb."
-	donator_pet = 	/mob/living/basic/ggg/susflash
+	donator_pet = 	/mob/living/basic/susflash
 
 /datum/loadout_item/pocket_items/donator/susflash
 	name = "Pet Delivery Beacon - Ordinary Flash Bulb"

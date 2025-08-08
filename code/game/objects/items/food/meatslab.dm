@@ -464,6 +464,15 @@
 /obj/item/food/meat/slab/pig/make_grillable()
 	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/plain/pig, rand(30 SECONDS, 90 SECONDS), TRUE, TRUE, /datum/pollutant/food/fried_meat)
 
+/obj/item/food/meat/slab/glerb
+	name = "glerb meat"
+	desc = "A slab of sickeningly green meat."
+	icon_state = "glerb"
+	tastes = list("fizzy" = 1)
+	foodtypes = RAW | MEAT | GROSS
+
+/obj/item/food/meat/slab/glerb/make_grillable()
+	AddComponent(/datum/component/grillable, /obj/item/food/meat/steak/plain/glerb, rand(30 SECONDS, 90 SECONDS), TRUE, TRUE, /datum/pollutant/food/fried_meat)
 
 ////////////////////////////////////// MEAT STEAKS ///////////////////////////////////////////////////////////
 /obj/item/food/meat/steak
@@ -574,6 +583,13 @@
 	icon_state = "pigsteak"
 	tastes = list("pig" = 1)
 	foodtypes = MEAT
+
+/obj/item/food/meat/steak/plain/glerb
+	name = "glerb steak"
+	desc = "It doesn't look any less green..."
+	icon_state = "glerbsteak"
+	tastes = list("glerby" = 1)
+	foodtypes = MEAT | GROSS
 
 //////////////////////////////// MEAT CUTLETS ///////////////////////////////////////////////////////
 

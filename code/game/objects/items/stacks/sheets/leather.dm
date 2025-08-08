@@ -120,6 +120,14 @@ GLOBAL_LIST_INIT(xeno_recipes, list ( \
 	. = ..()
 	. += GLOB.xeno_recipes
 
+/obj/item/stack/sheet/animalhide/glerb
+	name = "glerb hide"
+	desc = "The peeled skin of a glerb."
+	singular_name = "glerb hide piece"
+	icon_state = "sheet-glerb"
+	inhand_icon_state = null
+	merge_type = /obj/item/stack/sheet/animalhide/glerb
+
 //don't see anywhere else to put these, maybe together they could be used to make the xenos suit?
 /obj/item/stack/sheet/xenochitin
 	name = "alien chitin"
