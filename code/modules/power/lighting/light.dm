@@ -30,7 +30,7 @@
 	var/bulb_falloff = LIGHTING_DEFAULT_FALLOFF_CURVE
 
 	///Default colour of the light.
-	var/bulb_colour = "#f3fffac4"
+	var/bulb_colour = LIGHT_COLOR_DEFAULT
 	///LIGHT_OK, _EMPTY, _BURNED or _BROKEN
 	var/status = LIGHT_OK
 	///Should we flicker?
@@ -83,7 +83,6 @@
 	var/fire_brightness = 4
 	///The Light colour to use when working in fire alarm status
 	var/fire_colour = COLOR_FIRE_LIGHT_RED
-
 	///Power usage - W per unit of luminosity
 	var/power_consumption_rate = 20
 
@@ -122,6 +121,7 @@
 		RegisterSignal(SSdcs, COMSIG_GLOB_GREY_TIDE_LIGHT, PROC_REF(grey_tide)) //Only put the signal on station lights
 
 	RegisterSignal(src, COMSIG_LIGHT_EATER_ACT, PROC_REF(on_light_eater))
+	RegisterSignal(SSsecurity_level, COMSIG_SECURITY_LEVEL_CHANGED, PROC_REF(alert_level_updated))
 	AddElement(/datum/element/atmos_sensitive, mapload)
 	return INITIALIZE_HINT_LATELOAD
 
@@ -198,6 +198,21 @@
 /obj/machinery/light/proc/handle_fire(area/source, new_fire)
 	SIGNAL_HANDLER
 	update(dont_burn_out = TRUE)
+
+/obj/machinery/light/proc/alert_level_updated()
+	SIGNAL_HANDLER
+
+	if(!is_station_level(z))
+		return
+	if(!is_station_area_or_adjacent(src))
+		return
+	if(SSsecurity_level.get_current_level_as_number() == SEC_LEVEL_DELTA)
+		set_major_emergency_light()
+	else
+		unset_major_emergency_light()
+
+
+
 
 // update the icon_state and luminosity of the light depending on its state
 /obj/machinery/light/proc/update(trigger = TRUE, dont_burn_out = FALSE)
@@ -588,7 +603,7 @@
 
 		if(protected || HAS_TRAIT(user, TRAIT_RESISTHEAT) || HAS_TRAIT(user, TRAIT_RESISTHEATHANDS))
 			to_chat(user, span_notice("You remove the light [fitting]."))
-		else if(istype(user) && user.dna.check_mutation(/datum/mutation/human/telekinesis))
+		else if(istype(user) && user.dna.check_mutation(/datum/mutation/telekinesis))
 			to_chat(user, span_notice("You telekinetically remove the light [fitting]."))
 		else
 			var/obj/item/bodypart/affecting = user.get_bodypart("[(user.active_hand_index % 2 == 0) ? "r" : "l" ]_arm")
@@ -704,6 +719,11 @@
 	var/obj/item/light/tube = drop_light_tube()
 	tube?.burn()
 	return
+
+/obj/machinery/light/on_saboteur(datum/source, disrupt_duration)
+	. = ..()
+	break_light_tube()
+	return TRUE
 
 /obj/machinery/light/proc/grey_tide(datum/source, list/grey_tide_areas)
 	SIGNAL_HANDLER

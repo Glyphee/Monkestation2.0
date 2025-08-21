@@ -71,6 +71,19 @@
 	item_path = /obj/item/toy/plush/admin/andrea
 	item_cost = 7500
 
+/obj/item/toy/plush/admin/antlers
+	name = "Nikki"
+	desc = "She seems dangerous. There's a tag wrapped around one of the ears... \"property of Antlers\". You ponder how a pair of antlers could own such an object."
+	icon_state = "antlers"
+	gender = FEMALE
+/datum/loadout_item/plushies/antlers
+	name = "Nikki Plush"
+	item_path = /obj/item/toy/plush/admin/antlers
+/datum/store_item/plushies/antlers
+	name = "Nikki Plush"
+	item_path = /obj/item/toy/plush/admin/antlers
+	item_cost = 7500
+
 /obj/item/toy/plush/admin/pippi
 	name = "pippi"
 	desc = "..."
@@ -426,6 +439,10 @@
 	desc = "Our adorable staff coder slimegirl! We love you Siro!"
 	icon_state = "siro-mask"
 	append_note = FALSE
+	attack_verb_continuous = list("bloops", "blurbles", "glomps")
+	attack_verb_simple = list("bloop", "blurble", "glomp")
+	squeak_override = list('sound/effects/footstep/slime1.ogg' = 1)
+	gender = FEMALE
 /datum/loadout_item/plushies/siro
 	name = "Siro Yamamuchi Plush"
 	item_path = /obj/item/toy/plush/admin/siro
@@ -534,3 +551,16 @@
 			if (brushed > 50 && !GetComponent(/datum/component/particle_spewer/sparkle))
 				AddComponent(/datum/component/particle_spewer/sparkle)
 /** SHION PLUSH END **/
+
+/obj/item/toy/plush/admin/mcsteal
+	name = "Robert McPlushie"
+	desc = "Holy fuck, he McStole a plushie tank."
+	icon_state = "mcsteal"
+	squeak_override = list('sound/weapons/gun/general/lighttankgun.ogg'=1)
+/datum/loadout_item/plushies/mcsteal
+	name = "McSteal Plush"
+	item_path = /obj/item/toy/plush/admin/mcsteal
+/datum/store_item/plushies/mcsteal
+	name = "McSteal Plush"
+	item_path = /obj/item/toy/plush/admin/mcsteal
+	item_cost = 7500
