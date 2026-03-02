@@ -59,24 +59,20 @@
 	return TRUE
 
 
-/obj/item/reagent_containers/pill/afterattack(obj/target, mob/user , proximity)
-	. = ..()
-	if(!proximity)
-		return
-	. |= AFTERATTACK_PROCESSED_ITEM
+/obj/item/reagent_containers/pill/interact_with_atom(atom/target, mob/living/user, list/modifiers)
 	if(!dissolvable || !target.is_refillable())
-		return
+		return NONE
 	if(target.is_drainable() && !target.reagents.total_volume)
 		to_chat(user, span_warning("[target] is empty! There's nothing to dissolve [src] in."))
-		return
-
+		return ITEM_INTERACT_BLOCKING
 	if(target.reagents.holder_full())
 		to_chat(user, span_warning("[target] is full."))
-		return
+		return ITEM_INTERACT_BLOCKING
 
 	user.visible_message(span_warning("[user] slips something into [target]!"), span_notice("You dissolve [src] in [target]."), null, 2)
 	reagents.trans_to(target, reagents.total_volume, transfered_by = user)
 	qdel(src)
+	return ITEM_INTERACT_SUCCESS
 
 /*
  * On accidental consumption, consume the pill
@@ -279,8 +275,15 @@
 	name = "maintenance pill"
 	desc = "A strange pill found in the depths of maintenance."
 	icon_state = "pill21"
-	var/static/list/descs = list("Your feeling is telling you no, but...","Drugs are expensive, you can't afford not to eat any pills that you find."\
-	, "Surely, there's no way this could go bad.", "Winners don't do dr- oh what the heck!", "Free pills? At no cost, how could I lose?")
+	///Boolean on whether this will count towards your achievement score if you consume it.
+	var/count_towards_achievement = FALSE
+	var/static/list/descs = list(
+		"Your feeling is telling you no, but...",
+		"Drugs are expensive, you can't afford not to eat any pills that you find.",
+		"Surely, there's no way this could go bad.",
+		"Winners don't do dr- oh what the heck!",
+		"Free pills? At no cost, how could I lose?",
+	)
 
 /obj/item/reagent_containers/pill/maintenance/Initialize(mapload)
 	//monkestation edit on next line: replaced get_random_reagent_id_unrestricted() with pick_weight(GLOB.weighted_random_reagents)
@@ -311,10 +314,22 @@
 	else
 		icon_state = "pill[rand(1,21)]"
 
-/obj/item/reagent_containers/pill/maintenance/achievement/on_consumption(mob/M, mob/user)
+/obj/item/reagent_containers/pill/maintenance/on_consumption(mob/person_eating, mob/person_that_fed_us)
 	. = ..()
+	if(count_towards_achievement)
+		person_eating.client?.give_award(/datum/award/score/maintenance_pill, person_eating)
 
-	M.client?.give_award(/datum/award/score/maintenance_pill, M)
+/obj/item/reagent_containers/pill/maintenance/achievement
+	count_towards_achievement = TRUE
+
+/obj/item/reagent_containers/pill/maintenance/achievement/Initialize(mapload)
+	. = ..()
+	RegisterSignal(src, COMSIG_ON_REAGENT_SCAN, PROC_REF(on_chemical_scan))
+
+///called when we are chemically scanned.
+/obj/item/reagent_containers/pill/maintenance/achievement/proc/on_chemical_scan(atom/source, mob/user)
+	SIGNAL_HANDLER
+	count_towards_achievement = FALSE
 
 /obj/item/reagent_containers/pill/potassiodide
 	name = "potassium iodide pill"
@@ -336,6 +351,12 @@
 	icon_state = "pill8"
 	list_reagents = list(/datum/reagent/iron = 30)
 	rename_with_volume = TRUE
+
+/obj/item/reagent_containers/pill/radiomagnetic_disruptor
+	name = "radiomagnetic disruptor pill"
+	desc = "A small pill of nanite purging toxin."
+	icon_state = "pill3"
+	list_reagents = list(/datum/reagent/toxin/radiomagnetic_disruptor = 10)
 
 // Pill styles for chem master
 

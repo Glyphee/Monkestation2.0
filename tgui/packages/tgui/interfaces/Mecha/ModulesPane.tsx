@@ -1,21 +1,21 @@
+import { toFixed } from 'common/math';
+import { classes } from 'common/react';
+import { GasmixParser } from 'tgui/interfaces/common/GasmixParser';
 import { useBackend } from '../../backend';
 import {
-  Icon,
-  NumberInput,
-  ProgressBar,
   Box,
   Button,
-  Section,
-  Stack,
+  Collapsible,
+  Icon,
   LabeledList,
   NoticeBox,
-  Collapsible,
+  NumberInput,
+  ProgressBar,
+  Section,
+  Stack,
 } from '../../components';
-import { MainData, MechModule } from './data';
-import { classes } from 'common/react';
-import { toFixed } from 'common/math';
 import { formatPower } from '../../format';
-import { GasmixParser } from 'tgui/interfaces/common/GasmixParser';
+import type { MainData, MechModule } from './data';
 
 const moduleSlotIcon = (param) => {
   switch (param) {
@@ -58,7 +58,7 @@ export const ModulesPane = (props) => {
     <Section
       title="Equipment"
       fill
-      style={{ 'overflow-y': 'auto' }}
+      style={{ overflowY: 'auto' }}
       buttons={
         <Button
           icon={!weapons_safety ? 'triangle-exclamation' : 'helmet-safety'}
@@ -96,9 +96,9 @@ export const ModulesPane = (props) => {
                   <Stack.Item
                     lineHeight="32px"
                     style={{
-                      'text-transform': 'capitalize',
+                      textTransform: 'capitalize',
                       overflow: 'hidden',
-                      'text-overflow': 'ellipsis',
+                      textOverflow: 'ellipsis',
                     }}
                   >
                     {`${moduleSlotLabel(module.slot)} Slot`}
@@ -128,9 +128,9 @@ export const ModulesPane = (props) => {
                   <Stack.Item
                     lineHeight="32px"
                     style={{
-                      'text-transform': 'capitalize',
+                      textTransform: 'capitalize',
                       overflow: 'hidden',
-                      'text-overflow': 'ellipsis',
+                      textOverflow: 'ellipsis',
                     }}
                   >
                     {module.name}
@@ -160,7 +160,7 @@ export const ModuleDetails = (props) => {
           <Stack.Item>
             <Stack>
               <Stack.Item grow>
-                <h2 style={{ 'text-transform': 'capitalize' }}>{name}</h2>
+                <h2 style={{ textTransform: 'capitalize' }}>{name}</h2>
                 <Box italic opacity={0.5}>
                   {moduleSlotLabel(slot)}
                 </Box>
@@ -307,8 +307,9 @@ const MECHA_SNOWFLAKE_ID_RADIO = 'radio_snowflake';
 const MECHA_SNOWFLAKE_ID_AIR_TANK = 'air_tank_snowflake';
 const MECHA_SNOWFLAKE_ID_WEAPON_BALLISTIC = 'ballistic_weapon_snowflake';
 const MECHA_SNOWFLAKE_ID_GENERATOR = 'generator_snowflake';
+const MECHA_SNOWFLAKE_ID_RCD = 'rcd_snowflake';
 
-export const ModuleDetailsExtra = (props: { module: MechModule }, context) => {
+export const ModuleDetailsExtra = (props: { module: MechModule }) => {
   const module = props.module;
   switch (module.snowflake.snowflake_id) {
     case MECHA_SNOWFLAKE_ID_WEAPON_BALLISTIC:
@@ -325,6 +326,8 @@ export const ModuleDetailsExtra = (props: { module: MechModule }, context) => {
       return <SnowflakeRadio module={module} />;
     case MECHA_SNOWFLAKE_ID_GENERATOR:
       return <SnowflakeGeneraor module={module} />;
+    case MECHA_SNOWFLAKE_ID_RCD:
+      return <SnowflakeRCD module={module} />;
     default:
       return null;
   }
@@ -518,7 +521,7 @@ const SnowflakeRadio = (props) => {
           selected={microphone}
           icon={microphone ? 'microphone' : 'microphone-slash'}
         >
-          {(microphone ? 'En' : 'Dis') + 'abled'}
+          {`${microphone ? 'En' : 'Dis'}abled`}
         </Button>
       </LabeledList.Item>
       <LabeledList.Item label="Speaker">
@@ -532,12 +535,12 @@ const SnowflakeRadio = (props) => {
           selected={speaker}
           icon={speaker ? 'volume-up' : 'volume-mute'}
         >
-          {(speaker ? 'En' : 'Dis') + 'abled'}
+          {`${speaker ? 'En' : 'Dis'}abled`}
         </Button>
       </LabeledList.Item>
       <LabeledList.Item label="Frequency">
         <NumberInput
-          animate
+          animated
           unit="kHz"
           step={0.2}
           stepPixelSize={10}
@@ -545,7 +548,8 @@ const SnowflakeRadio = (props) => {
           maxValue={maxFrequency / 10}
           value={frequency / 10}
           format={(value) => toFixed(value, 1)}
-          onDrag={(e, value) =>
+          tickWhileDragging
+          onChange={(value) =>
             act('equip_act', {
               ref: ref,
               gear_action: 'set_frequency',
@@ -651,7 +655,7 @@ const SnowflakeAirTank = (props) => {
               minValue={tank_release_pressure_min}
               maxValue={tank_release_pressure_max}
               step={10}
-              onChange={(e, value) =>
+              onChange={(value) =>
                 act('equip_act', {
                   ref: ref,
                   gear_action: 'set_cabin_pressure',
@@ -730,8 +734,8 @@ const SnowflakeAirTank = (props) => {
             minValue={tank_pump_pressure_min}
             maxValue={tank_pump_pressure_max}
             step={10}
-            format={(value) => Math.round(value)}
-            onChange={(e, value) =>
+            format={(value) => Math.round(value)?.toString()}
+            onChange={(value) =>
               act('equip_act', {
                 ref: ref,
                 gear_action: 'set_tank_pump_pressure',
@@ -807,9 +811,9 @@ const SnowflakeOrebox = (props) => {
             <Stack.Item
               lineHeight="24px"
               style={{
-                'text-transform': 'capitalize',
+                textTransform: 'capitalize',
                 overflow: 'hidden',
-                'text-overflow': 'ellipsis',
+                textOverflow: 'ellipsis',
               }}
             >
               {`${contents[item].amount}x ${contents[item].name}`}
@@ -850,7 +854,7 @@ const SnowflakeCargo = (props) => {
                 })
               }
               style={{
-                'text-transform': 'capitalize',
+                textTransform: 'capitalize',
               }}
             >
               {item.name}
@@ -915,7 +919,53 @@ const SnowflakeGeneraor = (props) => {
     <LabeledList.Item label="Fuel Amount">
       {fuel === null
         ? 'None'
-        : toFixed(fuel * sheet_material_amount, 0.1) + ' cm³'}
+        : `${toFixed(fuel * sheet_material_amount, 0.1)} cm³`}
     </LabeledList.Item>
+  );
+};
+
+const SnowflakeRCD = (props) => {
+  const { act, data } = useBackend<MainData>();
+  const { ref } = props.module;
+  const { scan_ready, deconstructing, mode } = props.module.snowflake;
+  return (
+    <>
+      <LabeledList.Item label="Destruction Scan">
+        <Button
+          icon="satellite-dish"
+          color={scan_ready ? 'green' : 'transparent'}
+          onClick={() =>
+            act('equip_act', {
+              ref: ref,
+              gear_action: 'rcd_scan',
+            })
+          }
+        />
+      </LabeledList.Item>
+      <LabeledList.Item label="Deconstructing">
+        <Button
+          icon="power-off"
+          content={deconstructing ? 'On' : 'Off'}
+          color={deconstructing ? 'green' : 'blue'}
+          onClick={() =>
+            act('equip_act', {
+              ref: ref,
+              gear_action: 'toggle_deconstruct',
+            })
+          }
+        />
+      </LabeledList.Item>
+      <LabeledList.Item label="Construction Mode">
+        <Button
+          content={mode}
+          onClick={() =>
+            act('equip_act', {
+              ref: ref,
+              gear_action: 'change_mode',
+            })
+          }
+        />
+      </LabeledList.Item>
+    </>
   );
 };

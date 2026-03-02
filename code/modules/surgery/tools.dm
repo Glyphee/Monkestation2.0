@@ -336,11 +336,9 @@
 	. = ..()
 	UnregisterSignal(user, COMSIG_SURGERY_STARTING)
 
-/obj/item/surgical_processor/afterattack(atom/design_holder, mob/user, proximity)
-	if(!proximity)
-		return ..()
+/obj/item/surgical_processor/interact_with_atom(atom/design_holder, mob/living/user, list/modifiers)
 	if(!istype(design_holder, /obj/item/disk/surgery) && !istype(design_holder, /obj/machinery/computer/operating))
-		return ..()
+		return NONE
 	balloon_alert(user, "copying designs...")
 	playsound(src, 'sound/machines/terminal_processing.ogg', 25, TRUE)
 	if(do_after(user, 1 SECONDS, target = design_holder))
@@ -353,7 +351,8 @@
 		playsound(src, 'sound/machines/terminal_success.ogg', 25, TRUE)
 		downloaded = TRUE
 		update_appearance(UPDATE_OVERLAYS)
-	return TRUE
+		return ITEM_INTERACT_SUCCESS
+	return ITEM_INTERACT_BLOCKING
 
 /obj/item/surgical_processor/update_overlays()
 	. = ..()
@@ -377,7 +376,6 @@
 	lefthand_file = 'icons/mob/inhands/equipment/medical_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/medical_righthand.dmi'
 	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT*3, /datum/material/glass =HALF_SHEET_MATERIAL_AMOUNT * 1.5, /datum/material/silver =SHEET_MATERIAL_AMOUNT, /datum/material/gold =HALF_SHEET_MATERIAL_AMOUNT * 1.5, /datum/material/diamond =SMALL_MATERIAL_AMOUNT * 2, /datum/material/titanium = SHEET_MATERIAL_AMOUNT*2)
-	hitsound = 'sound/weapons/blade1.ogg'
 	force = 16
 	w_class = WEIGHT_CLASS_NORMAL
 	toolspeed = 0.7
@@ -585,7 +583,7 @@
 	tool_behaviour = TOOL_BLOODFILTER
 	toolspeed = 1
 	/// Assoc list of chem ids to names, used for deciding which chems to filter when used for surgery
-	var/list/whitelist = list()
+	var/list/blacklist = list()
 
 /obj/item/blood_filter/get_surgery_tool_overlay(tray_extended)
 	return "filter"
@@ -599,19 +597,19 @@
 /obj/item/blood_filter/ui_data(mob/user)
 	var/list/data = list()
 	var/list/chem_names = list()
-	for(var/key in whitelist)
-		chem_names += whitelist[key]
-	data["whitelist"] = chem_names
+	for(var/key in blacklist)
+		chem_names += blacklist[key]
+	data["blacklist"] = chem_names
 	return data
 
-/obj/item/blood_filter/ui_act(action, params)
+/obj/item/blood_filter/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	. = ..()
 	if(.)
 		return
 	. = TRUE
 	switch(action)
 		if("add")
-			var/selected_reagent = tgui_input_list(usr, "Select reagent to filter", "Whitelist reagent", GLOB.chemical_name_list)
+			var/selected_reagent = tgui_input_list(usr, "Select reagent to filter", "Blacklist reagent", GLOB.chemical_name_list)
 			if(!selected_reagent)
 				return TRUE
 
@@ -619,12 +617,12 @@
 			if(!chem_id)
 				return TRUE
 
-			if(!(chem_id in whitelist))
-				whitelist[chem_id] = selected_reagent
+			if(!(chem_id in blacklist))
+				blacklist[chem_id] = selected_reagent
 
 
 
 		if("remove")
 			var/chem_name = params["reagent"]
 			var/chem_id = get_chem_id(chem_name)
-			whitelist -= chem_id
+			blacklist -= chem_id

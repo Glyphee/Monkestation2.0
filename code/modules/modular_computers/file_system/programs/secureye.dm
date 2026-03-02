@@ -3,13 +3,13 @@
 /datum/computer_file/program/secureye
 	filename = "secureye"
 	filedesc = "SecurEye"
-	category = PROGRAM_CATEGORY_MISC
+	downloader_category = PROGRAM_CATEGORY_SECURITY
 	ui_header = "borg_mon.gif"
-	program_icon_state = "generic"
+	program_open_overlay = "generic"
 	extended_desc = "This program allows access to standard security camera networks."
-	requires_ntnet = TRUE
-	transfer_access = list(ACCESS_SECURITY)
-	usage_flags = PROGRAM_CONSOLE | PROGRAM_LAPTOP
+	program_flags = PROGRAM_ON_NTNET_STORE | PROGRAM_REQUIRES_NTNET
+	download_access = list(ACCESS_SECURITY)
+	can_run_on_flags = PROGRAM_CONSOLE | PROGRAM_LAPTOP
 	size = 5
 	tgui_id = "NtosSecurEye"
 	program_icon = "eye"
@@ -18,7 +18,7 @@
 	///Boolean on whether or not the app will make noise when flipping around the channels.
 	var/spying = FALSE
 
-	var/list/network = list("ss13")
+	var/list/network = list(CAMERANET_NETWORK_SS13)
 	///List of weakrefs of all users watching the program.
 	var/list/concurrent_users = list()
 
@@ -38,14 +38,18 @@
 	filename = "syndeye"
 	filedesc = "SyndEye"
 	extended_desc = "This program allows for illegal access to security camera networks."
-	transfer_access = list()
-	available_on_ntnet = FALSE
-	available_on_syndinet = TRUE
-	requires_ntnet = FALSE
-	usage_flags = PROGRAM_ALL
-	unique_copy = TRUE
+	download_access = list()
+	can_run_on_flags = PROGRAM_ALL
+	program_flags = PROGRAM_ON_SYNDINET_STORE | PROGRAM_UNIQUE_COPY
 
-	network = list("ss13", "mine", "rd", "labor", "ordnance", "minisat")
+	network = list(
+		CAMERANET_NETWORK_SS13,
+		CAMERANET_NETWORK_MINE,
+		CAMERANET_NETWORK_RD,
+		CAMERANET_NETWORK_LABOR,
+		CAMERANET_NETWORK_ORDNANCE,
+		CAMERANET_NETWORK_MINISAT,
+	)
 	spying = TRUE
 
 /datum/computer_file/program/secureye/on_install(datum/computer_file/source, obj/item/modular_computer/computer_installing)
@@ -99,7 +103,7 @@
 		data["activeCamera"] = list(
 			name = active_camera.c_tag,
 			ref = REF(active_camera),
-			status = active_camera.status,
+			status = active_camera.camera_enabled,
 		)
 	return data
 
@@ -123,7 +127,7 @@
 			else
 				camera_ref = null
 			if(!spying)
-				playsound(computer, get_sfx(SFX_TERMINAL_TYPE), 25, FALSE)
+				playsound(computer, SFX_TERMINAL_TYPE, 25, FALSE)
 			if(isnull(camera_ref))
 				return TRUE
 			if(internal_tracker)
@@ -173,6 +177,24 @@
 		if(!spying)
 			playsound(computer, 'sound/machines/terminal_off.ogg', 25, FALSE)
 
+// this is stupid imo
+// there has to be a better solution for this
+/datum/computer_file/program/secureye/proc/endpoint(atom/source, turf/target_turf)
+	var/turf/current_turf = get_turf(source)
+	var/turf/old_turf = current_turf
+
+	if(current_turf == target_turf)
+		return current_turf
+
+	current_turf = get_step_towards(current_turf, target_turf)
+	while(current_turf != target_turf)
+		if(IS_OPAQUE_TURF(current_turf) || !current_turf)
+			return old_turf
+		old_turf = current_turf
+		current_turf = get_step_towards(current_turf, target_turf)
+
+	return current_turf
+
 /datum/computer_file/program/secureye/proc/update_active_camera_screen()
 	var/obj/machinery/camera/active_camera = camera_ref?.resolve()
 	// Show static if can't use the camera
@@ -183,7 +205,11 @@
 	var/list/visible_turfs = list()
 
 	// Get the camera's turf to correctly gather what's visible from it's turf, in case it's located in a moving object (borgs / mechs)
-	var/new_cam_turf = get_turf(active_camera)
+	var/turf/new_cam_turf = get_turf(active_camera)
+	var/tx = clamp(new_cam_turf.x + active_camera.view_offset_x, 1, world.maxx)
+	var/ty = clamp(new_cam_turf.y + active_camera.view_offset_y, 1, world.maxy)
+	new_cam_turf = locate(tx, ty, new_cam_turf.z)
+	new_cam_turf = endpoint(active_camera, new_cam_turf)
 
 	// If we're not forcing an update for some reason and the cameras are in the same location,
 	// we don't need to update anything.

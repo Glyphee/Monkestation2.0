@@ -50,13 +50,15 @@
 /datum/armament_entry/company_import/sol_defense/armor_hardened/emt_enclosed_helmet
 	item_type = /obj/item/clothing/head/helmet/toggleable/sf_hardened/emt
 
+/datum/armament_entry/company_import/sol_defense/armor_hardened/emt2_enclosed_helmet
+	item_type = /obj/item/clothing/head/helmet/toggleable/sf_hardened/emt2
+
 /datum/armament_entry/company_import/sol_defense/armor_hardened/hardened_vest
 	item_type = /obj/item/clothing/suit/armor/sf_hardened
 
 /datum/armament_entry/company_import/sol_defense/armor_hardened/emt_hardened_vest
 	item_type = /obj/item/clothing/suit/armor/sf_hardened/emt
 
-/*
 
 /datum/armament_entry/company_import/sol_defense/case
 	subcategory = "Weapon Cases"
@@ -68,6 +70,8 @@
 /datum/armament_entry/company_import/sol_defense/case/carwo
 	item_type = /obj/item/storage/toolbox/guncase/skyrat/carwo_large_case/empty
 	cost = PAYCHECK_COMMAND * 2
+
+/*
 
 /datum/armament_entry/company_import/sol_defense/sidearm
 	subcategory = "Sidearms"

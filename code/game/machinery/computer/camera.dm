@@ -8,7 +8,7 @@
 	circuit = /obj/item/circuitboard/computer/security
 	light_color = COLOR_SOFT_RED
 
-	var/list/network = list("ss13")
+	var/list/network = list(CAMERANET_NETWORK_SS13)
 	var/obj/machinery/camera/active_camera
 	/// The turf where the camera was last updated.
 	var/turf/last_camera_turf
@@ -60,7 +60,7 @@
 		// Turn on the console
 		if(length(concurrent_users) == 1 && is_living)
 			playsound(src, 'sound/machines/terminal_on.ogg', 25, FALSE)
-			use_power(active_power_usage)
+			use_energy(active_power_usage)
 		// Open UI
 		ui = new(user, src, "CameraConsole", name)
 		ui.open()
@@ -80,7 +80,7 @@
 		data["activeCamera"] = list(
 			name = active_camera.c_tag,
 			ref = REF(active_camera),
-			status = active_camera.status,
+			status = active_camera.camera_enabled,
 		)
 	return data
 
@@ -91,7 +91,7 @@
 	data["cameras"] = GLOB.cameranet.get_available_cameras_data(network)
 	return data
 
-/obj/machinery/computer/security/ui_act(action, params)
+/obj/machinery/computer/security/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	. = ..()
 	if(.)
 		return
@@ -99,7 +99,7 @@
 	if(action == "switch_camera")
 		var/obj/machinery/camera/selected_camera = locate(params["camera"]) in GLOB.cameranet.cameras
 		active_camera = selected_camera
-		playsound(src, get_sfx(SFX_TERMINAL_TYPE), 25, FALSE)
+		playsound(src, SFX_TERMINAL_TYPE, 25, FALSE)
 
 		if(isnull(active_camera))
 			return TRUE
@@ -107,6 +107,24 @@
 		update_active_camera_screen()
 
 		return TRUE
+
+// this is stupid imo
+// there has to be a better solution for this
+/obj/machinery/computer/security/proc/endpoint(atom/source, turf/target_turf)
+	var/turf/current_turf = get_turf(source)
+	var/turf/old_turf = current_turf
+
+	if(current_turf == target_turf)
+		return current_turf
+
+	current_turf = get_step_towards(current_turf, target_turf)
+	while(current_turf != target_turf)
+		if(IS_OPAQUE_TURF(current_turf) || !current_turf)
+			return old_turf
+		old_turf = current_turf
+		current_turf = get_step_towards(current_turf, target_turf)
+
+	return current_turf
 
 /obj/machinery/computer/security/proc/update_active_camera_screen()
 	// Show static if can't use the camera
@@ -117,7 +135,11 @@
 	var/list/visible_turfs = list()
 
 	// Get the camera's turf to correctly gather what's visible from it's turf, in case it's located in a moving object (borgs / mechs)
-	var/new_cam_turf = get_turf(active_camera)
+	var/turf/new_cam_turf = get_turf(active_camera)
+	var/tx = clamp(new_cam_turf.x + active_camera.view_offset_x, 1, world.maxx)
+	var/ty = clamp(new_cam_turf.y + active_camera.view_offset_y, 1, world.maxy)
+	new_cam_turf = locate(tx, ty, new_cam_turf.z)
+	new_cam_turf = endpoint(active_camera, new_cam_turf)
 
 	// If we're not forcing an update for some reason and the cameras are in the same location,
 	// we don't need to update anything.
@@ -154,7 +176,6 @@
 		active_camera = null
 		last_camera_turf = null
 		playsound(src, 'sound/machines/terminal_off.ogg', 25, FALSE)
-		use_power(0)
 
 /atom/movable/screen/map_view/camera
 	/// All the plane masters that need to be applied.
@@ -198,31 +219,31 @@
 	desc = "Used to access the various cameras on the outpost."
 	icon_screen = "mining"
 	icon_keyboard = "mining_key"
-	network = list("mine", "auxbase")
+	network = list(CAMERANET_NETWORK_MINE, CAMERANET_NETWORK_AUXBASE)
 	circuit = /obj/item/circuitboard/computer/mining
 
 /obj/machinery/computer/security/research
 	name = "research camera console"
 	desc = "Used to access the various cameras in science."
-	network = list("rd")
+	network = list(CAMERANET_NETWORK_RD)
 	circuit = /obj/item/circuitboard/computer/research
 
 /obj/machinery/computer/security/hos
 	name = "\improper Head of Security's camera console"
 	desc = "A custom security console with added access to the labor camp network."
-	network = list("ss13", "labor")
+	network = list(CAMERANET_NETWORK_SS13, CAMERANET_NETWORK_LABOR)
 	circuit = null
 
 /obj/machinery/computer/security/labor
 	name = "labor camp monitoring"
 	desc = "Used to access the various cameras on the labor camp."
-	network = list("labor")
+	network = list(CAMERANET_NETWORK_LABOR)
 	circuit = null
 
 /obj/machinery/computer/security/qm
 	name = "\improper Quartermaster's camera console"
 	desc = "A console with access to the mining, auxiliary base and vault camera networks."
-	network = list("mine", "auxbase", "vault")
+	network = list(CAMERANET_NETWORK_MINE, CAMERANET_NETWORK_AUXBASE, CAMERANET_NETWORK_VAULT)
 	circuit = null
 
 /obj/machinery/computer/security/old

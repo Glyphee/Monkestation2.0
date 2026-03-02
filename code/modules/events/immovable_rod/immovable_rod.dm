@@ -184,7 +184,12 @@
 		SSexplosions.highturf += clong
 		return ..()
 
+	// If we Bump into the tram front or back, push the tram. Otherwise smash the object as usual.
 	if(isobj(clong))
+		if(istramwall(clong) && !special_target)
+			rod_vs_tram_battle(clong)
+			return ..()
+
 		var/obj/clong_obj = clong
 		clong_obj.take_damage(INFINITY, BRUTE, NONE, TRUE, dir, INFINITY)
 		return ..()
@@ -214,14 +219,18 @@
 				transform = transform.Scale(1.005, 1.005)
 				name = "[initial(name)] of sentient slaying +[num_sentient_mobs_hit]"
 
-	if(iscarbon(smeared_mob))
-		var/mob/living/carbon/smeared_carbon = smeared_mob
+	var/mob/living/carbon/smeared_carbon = smeared_mob
+	if(istype(smeared_carbon))
 		smeared_carbon.adjustBruteLoss(100)
 		var/obj/item/bodypart/penetrated_chest = smeared_carbon.get_bodypart(BODY_ZONE_CHEST)
 		penetrated_chest?.receive_damage(60, wound_bonus = 20, sharpness=SHARP_POINTY)
 
 	if(smeared_mob.density || prob(10))
 		EX_ACT(smeared_mob, EXPLODE_HEAVY)
+		if (istype(smeared_carbon))
+			smeared_carbon.gib_fart()
+	else if (istype(smeared_carbon))
+		smeared_carbon.impact_fart()
 
 /obj/effect/immovablerod/attack_hand(mob/living/user, list/modifiers)
 	. = ..()
@@ -298,3 +307,25 @@
 /obj/effect/immovablerod/proc/walk_in_direction(direction)
 	destination_turf = get_edge_target_turf(src, direction)
 	SSmove_manager.move_towards(src, destination_turf)
+
+/**
+ * Rod will push the tram to a landmark if it hits the tram from the front/back
+ * while flying parallel.
+ */
+/obj/effect/immovablerod/proc/rod_vs_tram_battle()
+	var/obj/structure/industrial_lift/tram/industrial_lift = locate() in src.loc
+
+	if(isnull(industrial_lift))
+		return
+
+	var/datum/lift_master/tram/lift_master = industrial_lift.lift_master_datum
+
+	if(isnull(lift_master))
+		return
+
+	var/push_target = lift_master.rod_collision(src)
+
+	if(!push_target)
+		return
+
+	go_for_a_walk(push_target)

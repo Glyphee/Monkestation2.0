@@ -207,6 +207,9 @@
 	text_lose_indication = span_notice("You feel like your old self.")
 	quality = NEGATIVE
 	locked = TRUE //Species specific, keep out of actual gene pool
+	///The path of the species we turn the player into.
+	var/datum/species/species_turned_into = /datum/species/monkey
+	///The stored original species that the person has when they turned into the species above.
 	var/datum/species/original_species = /datum/species/human
 	var/original_name
 
@@ -218,7 +221,7 @@
 		return
 	original_species = owner.dna.species.type
 	original_name = owner.real_name
-	owner.monkeyize()
+	owner.monkeyize(monkey_type = species_turned_into)
 
 /datum/mutation/race/on_losing(mob/living/carbon/human/owner)
 	if(owner.stat == DEAD)
@@ -232,6 +235,12 @@
 	owner.fully_replace_character_name(null, original_name)
 	owner.humanize(original_species)
 
+/datum/mutation/race/simian
+	name = "Simianized"
+	desc = "A strange genome, the strain that connects the original simian to humanhood."
+	text_gain_indication = span_green("You feel unusually simian-like.")
+	species_turned_into = /datum/species/monkey/simian
+
 /datum/mutation/glow
 	name = "Glowy"
 	desc = "You permanently emit a light with a random color and intensity."
@@ -243,6 +252,7 @@
 	var/glow_power = 2.5
 	var/glow_range = 2.5
 	var/glow_color
+
 	var/obj/effect/dummy/lighting_obj/moblight/glow
 
 /datum/mutation/glow/on_acquiring(mob/living/carbon/human/owner)
@@ -251,6 +261,14 @@
 		return
 	glow_color = get_glow_color()
 	glow = owner.mob_light()
+	modify()
+	RegisterSignal(src, COMSIG_LIGHT_EATER_ACT, PROC_REF(on_light_eater))
+
+/datum/mutation/glow/modify()
+	if(!glow)
+		return
+	glow.set_light_range_power_color(glow_range * GET_MUTATION_POWER(src), glow_power, glow_color)
+	glow.set_light_on(TRUE)
 
 // Override modify here without a parent call, because we don't actually give an action.
 /datum/mutation/glow/setup()
@@ -259,10 +277,19 @@
 
 	glow.set_light_range_power_color(glow_range * GET_MUTATION_POWER(src), glow_power, glow_color)
 
+/datum/mutation/glow/proc/on_light_eater(mob/living/carbon/human/source, datum/light_eater)
+	SIGNAL_HANDLER
+	if(!glow)
+		return
+	glow.set_light_on(FALSE)
+	addtimer(CALLBACK(src, PROC_REF(modify)), 20 SECONDS * GET_MUTATION_SYNCHRONIZER(src), TIMER_UNIQUE|TIMER_OVERRIDE) //We're out for 20 seconds (reduced by sychronizer)
+	return COMPONENT_BLOCK_LIGHT_EATER
+
 /datum/mutation/glow/on_losing(mob/living/carbon/human/owner)
 	. = ..()
 	if(.)
 		return
+	UnregisterSignal(glow, COMSIG_LIGHT_EATER_ACT)
 	QDEL_NULL(glow)
 
 /// Returns a color for the glow effect
@@ -584,3 +611,55 @@
 
 	if(istype(new_limb, /obj/item/bodypart/head))
 		return COMPONENT_NO_ATTACH
+
+// Soft crit is disabed
+/datum/mutation/inexorable
+	name = "Inexorable"
+	desc = "Your body can push on beyond the limits of normal human endurance. \
+		However, pushing it too far can cause severe damage to your body."
+	quality = POSITIVE
+	// instability = POSITIVE_INSTABILITY_MODERATE // AWAITING TG#83439
+	instability = 25
+	text_gain_indication = span_notice("You feel inexorable.")
+	text_lose_indication = span_notice("You suddenly feel more human.")
+	difficulty = 24
+	synchronizer_coeff = 1
+	// mutation_traits = list(TRAIT_NOSOFTCRIT, TRAIT_ANALGESIA, TRAIT_NO_PAIN_EFFECTS) // AWAITING TG#83439
+
+/datum/mutation/inexorable/on_acquiring(mob/living/carbon/human/acquirer)
+	. = ..()
+	if(!.)
+		return
+	acquirer.add_traits(list(TRAIT_NOSOFTCRIT, TRAIT_ANALGESIA), GENETIC_MUTATION)
+	RegisterSignal(acquirer, COMSIG_LIVING_HEALTH_UPDATE, PROC_REF(check_health))
+	check_health()
+
+/datum/mutation/inexorable/on_losing(mob/living/carbon/human/owner)
+	. = ..()
+	if(.)
+		return
+	UnregisterSignal(owner, COMSIG_LIVING_HEALTH_UPDATE)
+	owner.remove_traits(list(TRAIT_NOSOFTCRIT, TRAIT_ANALGESIA), GENETIC_MUTATION)
+	REMOVE_TRAIT(owner, TRAIT_SOFTSPOKEN, REF(src))
+
+/datum/mutation/inexorable/proc/check_health(...)
+	SIGNAL_HANDLER
+	if(owner.health > owner.crit_threshold || owner.stat != CONSCIOUS)
+		REMOVE_TRAIT(owner, TRAIT_SOFTSPOKEN, REF(src))
+	else
+		ADD_TRAIT(owner, TRAIT_SOFTSPOKEN, REF(src))
+
+/datum/mutation/inexorable/on_life(seconds_per_tick, times_fired)
+	if(owner.health > owner.crit_threshold || owner.stat != CONSCIOUS || HAS_TRAIT(owner, TRAIT_STASIS))
+		return
+	var/multiplier = GET_MUTATION_SYNCHRONIZER(src)
+	if(HAS_TRAIT(owner, TRAIT_NOCRITDAMAGE))
+		multiplier *= 0.5
+	// Gives you 30 seconds of being in soft crit... give or take
+	if(HAS_TRAIT(owner, TRAIT_TOXIMMUNE) || HAS_TRAIT(owner, TRAIT_TOXINLOVER))
+		owner.adjustBruteLoss(1 * seconds_per_tick * multiplier, forced = TRUE, updating_health = FALSE)
+	else
+		owner.adjustToxLoss(0.5 * seconds_per_tick * multiplier, forced = TRUE, updating_health = FALSE)
+		owner.adjustBruteLoss(0.5 * seconds_per_tick * multiplier, forced = TRUE, updating_health = FALSE)
+	// Offsets suffocation but not entirely
+	owner.adjustOxyLoss(-0.5 * seconds_per_tick, forced = TRUE)

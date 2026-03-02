@@ -60,8 +60,8 @@ GLOBAL_LIST_INIT(loadout_pocket_items, generate_loadout_items(/datum/loadout_ite
 	item_path = /obj/item/storage/box/gum/nicotine
 
 /datum/loadout_item/pocket_items/gum_pack_hp
-	name = "Pack of HP+ Gum"
-	item_path = /obj/item/storage/box/gum/happiness
+	name = "Pack of Diet HP+ Gum"
+	item_path = /obj/item/storage/box/gum/happiness/diet
 
 /*
 *	LIPSTICK
@@ -148,7 +148,7 @@ GLOBAL_LIST_INIT(loadout_pocket_items, generate_loadout_items(/datum/loadout_ite
 	item_path = /obj/item/taperecorder
 
 /datum/loadout_item/pocket_items/tape
-	name = "Spare Cassette Tape"
+	name = "Spare Recording Tape"
 	item_path = /obj/item/tape/random
 
 /datum/loadout_item/pocket_items/newspaper

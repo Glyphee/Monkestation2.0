@@ -59,6 +59,9 @@
 	if(power <= 0)
 		return
 	var/turf/T = get_turf(holder.my_atom)
+	if(isnull(T))
+		holder.clear_reagents()
+		return
 	var/inside_msg
 	if(ismob(holder.my_atom))
 		var/mob/M = holder.my_atom
@@ -156,3 +159,8 @@
 		var/obj/item/food/drug/saturnx/new_glob = new(location)
 		new_glob.pixel_x = rand(-6, 6)
 		new_glob.pixel_y = rand(-6, 6)
+
+/datum/chemical_reaction/positronic_excitation_salts
+	results = list(/datum/reagent/drug/methamphetamine/robo = 1)
+	required_reagents = list(/datum/reagent/drug/methamphetamine = 1, /datum/reagent/dinitrogen_plasmide = 1)
+	reaction_tags = REACTION_TAG_DRUG | REACTION_TAG_EASY

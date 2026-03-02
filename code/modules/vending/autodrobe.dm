@@ -79,6 +79,7 @@
 				/obj/item/clothing/shoes/kris = 1,
 				/obj/item/clothing/gloves/kris = 1,
 				/obj/item/clothing/under/dress/hula = 1,
+				/obj/item/clothing/head/hats/adventurercap = 1,
 				//Monkestation Addition end
 			),
 		),
@@ -132,8 +133,9 @@
 				/obj/item/clothing/head/costume/jester = 1,
 				/obj/item/clothing/under/rank/civilian/clown/jester = 1, // MONKESTATION EDIT ADDITION
 				/obj/item/clothing/shoes/clown_shoes/green_jester_shoes =1, // MONKESTATION EDIT ADDITION
-				/obj/item/clothing/head/costume/jester/alt =1, // MONKESTATION EDIT ADDITION
-				/obj/item/clothing/under/rank/civilian/clown/jester/alt =1, // MONKESTATION EDIT ADDITION
+				/obj/item/clothing/head/costume/jester2 =1, // MONKESTATION EDIT ADDITION
+				/obj/item/clothing/under/rank/civilian/clown/jester2 =1, // MONKESTATION EDIT ADDITION
+				/obj/item/clothing/under/costume/jimbo = 2, // MONKESTATION EDIT ADDITION
 				/obj/item/clothing/under/costume/villain = 1,
 				/obj/item/clothing/suit/costume/joker = 1,
 				/obj/item/clothing/under/costume/joker = 1,
@@ -148,6 +150,8 @@
 				/obj/item/clothing/under/costume/harlequin =2,//MONKESTATION EDIT ADDITION
 				/obj/item/clothing/shoes/clown_shoes/harlequin_boots =2,//MONKESTATION EDIT ADDITION
 				/obj/item/clothing/under/costume/tragic = 2,
+				/obj/item/clothing/head/batterhat = 2,//MONKESTATION EDIT ADDITION
+				/obj/item/clothing/under/costume/batter = 2,//MONKESTATION EDIT ADDITION
 				/obj/item/clothing/under/costume/streetmime = 1,
 				/obj/item/clothing/mask/gas/clown_hat/yellow = 1,
 				/obj/item/clothing/shoes/clown_shoes/yellow = 1,

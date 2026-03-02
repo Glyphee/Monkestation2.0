@@ -54,6 +54,7 @@
 		/obj/item/stack/tile/iron/white/diagonal,
 		/obj/item/stack/tile/iron/white/herringbone,
 		/obj/item/stack/tile/iron/white_side,
+		/obj/item/stack/tile/iron/white_side_flat,
 		/obj/item/stack/tile/iron/white_corner,
 		/obj/item/stack/tile/iron/cafeteria,
 		/obj/item/stack/tile/iron/white/textured,
@@ -116,7 +117,7 @@
 		)
 		use(4)
 		user.put_in_inactive_hand(new_item)
-		return TOOL_ACT_TOOLTYPE_SUCCESS
+		return ITEM_INTERACT_SUCCESS
 
 /obj/item/stack/tile/iron/welder_act_secondary(mob/living/user, obj/item/tool)
 	if(get_amount() < 2)
@@ -132,7 +133,7 @@
 		)
 		use(2)
 		user.put_in_inactive_hand(new_item)
-		return TOOL_ACT_TOOLTYPE_SUCCESS
+		return ITEM_INTERACT_SUCCESS
 
 /obj/item/stack/tile/iron/base //this subtype should be used for most stuff
 	merge_type = /obj/item/stack/tile/iron/base
@@ -277,6 +278,14 @@
 	merge_type = /obj/item/stack/tile/iron/dark_side
 	tile_rotate_dirs = list(SOUTH, NORTH, EAST, WEST, SOUTHEAST, SOUTHWEST, NORTHEAST, NORTHWEST)
 
+/obj/item/stack/tile/iron/dark_side_flat
+	name = "half flat dark tile"
+	singular_name = "half dark floor tile"
+	icon_state = "tile_darkside"
+	turf_type = /turf/open/floor/iron/dark/side/flat
+	merge_type = /obj/item/stack/tile/iron/dark_side_flat
+	tile_rotate_dirs = list(SOUTH, NORTH, EAST, WEST, SOUTHEAST, SOUTHWEST, NORTHEAST, NORTHWEST)
+
 /obj/item/stack/tile/iron/dark_corner
 	name = "quarter dark tile"
 	singular_name = "quarter dark floor tile"
@@ -396,6 +405,14 @@
 	icon_state = "tile_whiteside"
 	turf_type = /turf/open/floor/iron/white/side
 	merge_type = /obj/item/stack/tile/iron/white_side
+	tile_rotate_dirs = list(SOUTH, NORTH, EAST, WEST, SOUTHEAST, SOUTHWEST, NORTHEAST, NORTHWEST)
+
+/obj/item/stack/tile/iron/white_side_flat
+	name = "half flat white tile"
+	singular_name = "half flat white floor tile"
+	icon_state = "tile_whiteside_flat"
+	turf_type = /turf/open/floor/iron/white/side/flat
+	merge_type = /obj/item/stack/tile/iron/white_side_flat
 	tile_rotate_dirs = list(SOUTH, NORTH, EAST, WEST, SOUTHEAST, SOUTHWEST, NORTHEAST, NORTHWEST)
 
 /obj/item/stack/tile/iron/white_corner

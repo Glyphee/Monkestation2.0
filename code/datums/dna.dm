@@ -115,11 +115,14 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 	new_dna.unique_features = unique_features
 	new_dna.human_blood_type = human_blood_type
 	new_dna.features = features.Copy()
-	new_dna.color_palettes = color_palettes.Copy()
+	new_dna.color_palettes = list()
+	for(var/palette_type, value in color_palettes)
+		var/datum/color_palette/palette = value
+		new_dna.color_palettes[palette_type] = palette.make_copy()
 	new_dna.real_name = real_name
 	new_dna.temporary_mutations = temporary_mutations.Copy()
-	new_dna.mutation_index = mutation_index
-	new_dna.default_mutation_genes = default_mutation_genes
+	new_dna.mutation_index = mutation_index.Copy()
+	new_dna.default_mutation_genes = default_mutation_genes.Copy()
 
 	//if the new DNA has a holder, transform them immediately, otherwise save it
 	if(new_dna.holder)
@@ -293,7 +296,7 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 	if(species?.inert_mutation)
 		if(islist(species.inert_mutation))
 			var/list/inert_mutations = species.inert_mutation
-			for(var/mutation as anything in inert_mutations)
+			for(var/mutation in inert_mutations)
 				mutations_temp += GET_INITIALIZED_MUTATION(mutation)
 		else
 			mutations_temp += GET_INITIALIZED_MUTATION(species.inert_mutation)
@@ -303,8 +306,9 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 	mutation_index.Cut()
 	default_mutation_genes.Cut()
 	shuffle_inplace(mutations_temp)
-	mutation_index[/datum/mutation/race] = create_sequence(/datum/mutation/race, FALSE)
-	default_mutation_genes[/datum/mutation/race] = mutation_index[/datum/mutation/race]
+	var/datum/mutation/race/species_mutation = species.species_race_mutation || prob(20) ? /datum/mutation/race/simian : /datum/mutation/race
+	mutation_index[species_mutation] = create_sequence(species_mutation, FALSE)
+	default_mutation_genes[species_mutation] = mutation_index[species_mutation]
 	for(var/i in 2 to DNA_MUTATION_BLOCKS)
 		var/datum/mutation/M = mutations_temp[i]
 		mutation_index[M.type] = create_sequence(M.type, FALSE, M.difficulty)
@@ -521,6 +525,8 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 /mob/living/carbon/set_species(datum/species/mrace, icon_update = TRUE, pref_load = FALSE)
 	if(QDELETED(src))
 		CRASH("You're trying to change your species post deletion, this is a recipe for madness")
+	if(HAS_TRAIT(src, TRAIT_SPECIESLOCK))//can't swap species
+		return
 	if(mrace && has_dna())
 		var/datum/species/new_race
 		if(ispath(mrace))
@@ -538,13 +544,8 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 			old_species.on_species_loss(src, new_race, pref_load)
 
 		dna.species.on_species_gain(src, old_species, pref_load)
-		if(ishuman(src))
-			qdel(language_holder)
-			var/species_holder = initial(mrace.species_language_holder)
-			language_holder = new species_holder(src)
-		update_atom_languages()
 		update_bodypart_speed_modifier()
-		log_mob_tag("SPECIES: [key_name(src)] \[[mrace]\]")
+		log_mob_tag("TAG: [tag] SPECIES: [key_name(src)] \[[mrace]\]")
 
 /mob/living/carbon/human/set_species(datum/species/mrace, icon_update = TRUE, pref_load = FALSE)
 	..()
@@ -785,7 +786,7 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 	. = dna.add_mutation(mutation, MUTATION_SOURCE_ACTIVATED)
 
 ///Returns a random mutation typepath based on the given arguments. By default, all available mutations in the dna sequence but the monkey one.
-/mob/living/carbon/proc/get_random_mutation_path(quality = POSITIVE|NEGATIVE|MINOR_NEGATIVE, scrambled = TRUE, sequence = TRUE, list/excluded_mutations = list(/datum/mutation/race))
+/mob/living/carbon/proc/get_random_mutation_path(quality = POSITIVE|NEGATIVE|MINOR_NEGATIVE, scrambled = TRUE, sequence = TRUE, list/excluded_mutations = list(/datum/mutation/race, /datum/mutation/race/simian))
 	if(!has_dna())
 		return null
 	var/list/mutations = list()
@@ -803,7 +804,7 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 	return length(possible) ? pick(possible) : null //prevent runtimes from picking null
 
 ///Gives the mob a random mutation based on the given arguments.
-/mob/living/carbon/proc/easy_random_mutate(quality = POSITIVE|NEGATIVE|MINOR_NEGATIVE, scrambled = TRUE, sequence = TRUE, list/excluded_mutations = list(/datum/mutation/race))
+/mob/living/carbon/proc/easy_random_mutate(quality = POSITIVE|NEGATIVE|MINOR_NEGATIVE, scrambled = TRUE, sequence = TRUE, list/excluded_mutations = list(/datum/mutation/race, /datum/mutation/race/simian))
 	var/mutation_path = get_random_mutation_path(quality, scrambled, sequence, excluded_mutations)
 	if(!mutation_path)
 		return
