@@ -6820,6 +6820,7 @@
 #include "monkestation\code\modules\admin\admin.dm"
 #include "monkestation\code\modules\admin\antag_tokens.dm"
 #include "monkestation\code\modules\admin\camera_view.dm"
+#include "monkestation\code\modules\admin\custom_gimmick_abilities.dm"
 #include "monkestation\code\modules\admin\event_tokens.dm"
 #include "monkestation\code\modules\admin\battle_royale\admin_procs.dm"
 #include "monkestation\code\modules\admin\battle_royale\battle_royale_controller.dm"
