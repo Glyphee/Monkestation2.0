@@ -44,7 +44,7 @@
 
 		COOLDOWN_START(src, last_tox_damage, RADIATION_TOX_INTERVAL)
 
-		if(HAS_TRAIT(parent, TRAIT_GOBLIN_METABOLISM))
+		if(is_species(parent, SPECIES_GOBLIN))
 			start_goblin_burn_splotch_timer()
 		else
 			start_burn_splotch_timer()
@@ -117,7 +117,7 @@
 		return
 
 	//Goblin Edit Begin
-	if(HAS_TRAIT(target, TRAIT_GOBLIN_METABOLISM))
+	if(is_species(parent, SPECIES_GOBLIN))
 		target.apply_damage(RADIATION_TOX_DAMAGE_PER_INTERVAL / 2, TOX) //Goblins take half radiation damage
 	else
 		target.apply_damage(RADIATION_TOX_DAMAGE_PER_INTERVAL, TOX)
